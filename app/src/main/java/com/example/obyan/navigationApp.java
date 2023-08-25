@@ -15,6 +15,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -49,7 +51,7 @@ import com.google.android.gms.maps.model.StyleSpan;
 import android.graphics.Color;
 
 
-public class navigationApp extends AppCompatActivity implements OnMapReadyCallback {
+public class navigationApp extends FragmentActivity implements OnMapReadyCallback {
     private final int FINE_PERMISSION_CODE = 1;
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;

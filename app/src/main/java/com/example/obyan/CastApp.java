@@ -1,18 +1,18 @@
 package com.example.obyan;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.mediarouter.app.MediaRouteButton;
 
+import com.google.android.gms.cast.MediaMetadata;
 import com.google.android.gms.cast.framework.CastButtonFactory;
 import com.google.android.gms.cast.framework.CastContext;
 import com.google.android.gms.cast.framework.CastSession;
 import com.google.android.gms.cast.framework.SessionManager;
 import com.google.android.gms.cast.framework.SessionManagerListener;
+
 
 public class CastApp extends AppCompatActivity {
 
@@ -20,16 +20,19 @@ public class CastApp extends AppCompatActivity {
     private CastContext mCastContext;
     private SessionManager mSessionManager;
     private CastSession mCastSession;
+    private MediaMetadata movieMetadata;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cast_app);
 
-        MediaRouteButton mMediaRouteButton = findViewById(R.id.media_route_button);
+        MediaRouteButton mMediaRouteButton = (MediaRouteButton) findViewById(R.id.media_route_button);
         CastButtonFactory.setUpMediaRouteButton(getApplicationContext(), mMediaRouteButton);
-        mCastContext = CastContext.getSharedInstance(getApplicationContext());
-        mSessionManager = mCastContext.getSessionManager();
+
+        mCastContext = CastContext.getSharedInstance(this);
+        mSessionManager = CastContext.getSharedInstance(this).getSessionManager();
 
     }
 
@@ -58,52 +61,45 @@ public class CastApp extends AppCompatActivity {
     }
 
     private class SessionManagerListenerImpl implements SessionManagerListener<CastSession> {
-
         @Override
-        public void onSessionEnded(CastSession session, int error) {
-            finish();
-        }
-
-        @Override
-        public void onSessionEnding(@NonNull CastSession castSession) {
-
-        }
-
-        @Override
-        public void onSessionResumeFailed(@NonNull CastSession castSession, int i) {
-
-        }
-
-        @Override
-        public void onSessionResumed(@NonNull CastSession castSession, boolean b) {
-
-        }
-
-        @Override
-        public void onSessionResuming(@NonNull CastSession castSession, @NonNull String s) {
-
-        }
-
-        @Override
-        public void onSessionStartFailed(@NonNull CastSession castSession, int i) {
-
+        public void onSessionStarting(CastSession session) {
         }
 
         @Override
         public void onSessionStarted(CastSession session, String sessionId) {
-            Log.d("CastApp", "onSessionStarted: " + sessionId);
             invalidateOptionsMenu();
         }
 
-
         @Override
-        public void onSessionStarting(@NonNull CastSession castSession) {
-
+        public void onSessionStartFailed(CastSession session, int error) {
+            int castReasonCode = mCastContext.getCastReasonCodeForCastStatusCode(error);
+            // Handle error
         }
 
         @Override
-        public void onSessionSuspended(@NonNull CastSession castSession, int i) {
+        public void onSessionSuspended(CastSession session, int reason) {
+        }
 
+        @Override
+        public void onSessionResuming(CastSession session, String sessionId) {
+        }
+
+        @Override
+        public void onSessionResumed(CastSession session, boolean wasSuspended) {
+            invalidateOptionsMenu();
+        }
+
+        @Override
+        public void onSessionResumeFailed(CastSession session, int error) {
+        }
+
+        @Override
+        public void onSessionEnding(CastSession session) {
+        }
+
+        @Override
+        public void onSessionEnded(CastSession session, int error) {
+            finish();
         }
     }
 }
