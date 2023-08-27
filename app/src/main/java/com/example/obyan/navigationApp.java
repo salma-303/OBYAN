@@ -3,19 +3,19 @@ package com.example.obyan;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.android.volley.Request;
@@ -31,7 +31,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.StyleSpan;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
@@ -45,36 +49,35 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.maps.model.StyleSpan;
-import android.graphics.Color;
 
 
 public class navigationApp extends FragmentActivity implements OnMapReadyCallback {
+    private final Handler handler = new Handler();
     private final int FINE_PERMISSION_CODE = 1;
+    private final boolean isMapReady = false;
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     private TextView nav_timeTextView;
     private GoogleMap myMap;
     private SearchView mapSearchView;
     private TextView nav_dateTextView;
-
+    private final Runnable updateTimeRunnable = new Runnable() {
+        @Override
+        public void run() {
+            updateTimeAndDate();
+            handler.postDelayed(this, 1000); // 1000 ms = 1 second
+        }
+    };
     private TextView temperatureTV;
     private ImageView iconIV;
-
     private ImageView buttonImage1;
     private ImageView buttonImage2;
-
     private ImageView buttonImage3;
     private ImageView buttonImage4;
-
     private boolean isButton1Enabled;
     private boolean isButton2Enabled;
-
     private boolean isButton3Enabled;
     private boolean isButton4Enabled;
-    private final boolean isMapReady = false;
     private Polyline routePolyline;
 
 
@@ -108,7 +111,37 @@ public class navigationApp extends FragmentActivity implements OnMapReadyCallbac
                         myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(destination, zoomLevel));
                     }
 
+                    if (addressList != null && !addressList.isEmpty()) {
 
+                        LatLng destination = new LatLng(address.getLatitude(), address.getLongitude());
+                        float zoomLevel = 16.0f;
+
+                        // Clear any existing polyline
+                        if (routePolyline != null) {
+                            routePolyline.remove();
+                        }
+
+                        // Create a new polyline with multicolored segments
+                        PolylineOptions polylineOptions = new PolylineOptions()
+                                .add(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), destination)
+                                .addSpan(new StyleSpan(Color.RED))  // First segment color
+                                .addSpan(new StyleSpan(Color.GREEN));  // Second segment color
+
+                        routePolyline = myMap.addPolyline(polylineOptions);
+
+                        // Add markers for current and destination locations
+                        myMap.clear(); // Clear existing markers
+                        myMap.addMarker(new MarkerOptions().position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).title("My Location"));
+                        myMap.addMarker(new MarkerOptions().position(destination).title(location));
+
+                        // Move camera to show both markers
+                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                        builder.include(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                        builder.include(destination);
+                        LatLngBounds bounds = builder.build();
+                        myMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+
+                    }
                 }
 
                 return false;
@@ -131,6 +164,8 @@ public class navigationApp extends FragmentActivity implements OnMapReadyCallbac
         nav_timeTextView = findViewById(R.id.nav_timeTextView);
         nav_dateTextView = findViewById(R.id.nav_dateTextView);
         updateTimeAndDate();
+        handler.postDelayed(updateTimeRunnable, 1000);
+
 //=================================================================================================
 
 //==================================================================================================
@@ -201,21 +236,21 @@ public class navigationApp extends FragmentActivity implements OnMapReadyCallbac
 
     private void updateButtonImages() {
         if (isButton1Enabled) {
-            buttonImage1.setImageResource(R.drawable.fog);
+            buttonImage2.setImageResource(R.drawable.fog);
         } else {
-            buttonImage1.setImageResource(R.drawable.yellowfog);
+            buttonImage2.setImageResource(R.drawable.yellowfog);
         }
 
         if (isButton2Enabled) {
-            buttonImage2.setImageResource(R.drawable.strong);
+            buttonImage3.setImageResource(R.drawable.strong);
         } else {
-            buttonImage2.setImageResource(R.drawable.yellowstrong);
+            buttonImage3.setImageResource(R.drawable.yellowstrong);
         }
 
         if (isButton3Enabled) {
-            buttonImage3.setImageResource(R.drawable.arrow2);
+            buttonImage1.setImageResource(R.drawable.arrow2);
         } else {
-            buttonImage3.setImageResource(R.drawable.greenarrow2);
+            buttonImage1.setImageResource(R.drawable.greenarrow2);
         }
 
         if (isButton4Enabled) {
@@ -244,6 +279,7 @@ public class navigationApp extends FragmentActivity implements OnMapReadyCallbac
 
                     // Save the city name in a variable for further use
                     String myCityName = cityName;
+
                     //==============================================================================
                     temperatureTV = findViewById(R.id.idTVTemperature);
                     iconIV = findViewById(R.id.idIVIcon);

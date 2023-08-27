@@ -175,21 +175,21 @@ public class MainActivity extends FragmentActivity {
 
     private void updateButtonImages() {
         if (isButton1Enabled) {
-            buttonImage1.setImageResource(R.drawable.fog);
+            buttonImage2.setImageResource(R.drawable.fog);
         } else {
-            buttonImage1.setImageResource(R.drawable.yellowfog);
+            buttonImage2.setImageResource(R.drawable.yellowfog);
         }
 
         if (isButton2Enabled) {
-            buttonImage2.setImageResource(R.drawable.strong);
+            buttonImage3.setImageResource(R.drawable.strong);
         } else {
-            buttonImage2.setImageResource(R.drawable.yellowstrong);
+            buttonImage3.setImageResource(R.drawable.yellowstrong);
         }
 
         if (isButton3Enabled) {
-            buttonImage3.setImageResource(R.drawable.arrow2);
+            buttonImage1.setImageResource(R.drawable.arrow2);
         } else {
-            buttonImage3.setImageResource(R.drawable.greenarrow2);
+            buttonImage1.setImageResource(R.drawable.greenarrow2);
         }
 
         if (isButton4Enabled) {
