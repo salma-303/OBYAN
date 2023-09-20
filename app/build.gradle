@@ -37,6 +37,9 @@ android {
             version '3.27.5'
         }
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {

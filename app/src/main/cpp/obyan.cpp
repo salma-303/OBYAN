@@ -330,8 +330,9 @@ void receiveData() {
 }
 
 
-extern "C" JNIEXPORT jobject JNICALL
-Java_com_example_second_1test_MainActivity_getFrame1Data(JNIEnv *env, jclass clazz) {
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_example_obyan_MainActivity_getFrame1Data(JNIEnv *env, jclass clazz) {
     jclass cls = env->FindClass(
             "com/example/obyan/FirstFrameData"); // Replace with the correct package and class name if changedddddd
     jmethodID constructor = env->GetMethodID(cls, "<init>", "(III)V");
@@ -348,9 +349,9 @@ Java_com_example_second_1test_MainActivity_getFrame1Data(JNIEnv *env, jclass cla
     // sprintf(buffer,"Frame 101 Data: %d", cachedDataFrame100.motorSpeedDec);
     return obj;
 }
-
-extern "C" JNIEXPORT jobject JNICALL
-Java_com_example_second_1test_MainActivity_getFrame2Data(JNIEnv *env, jclass clazz) {
+extern "C"
+JNIEXPORT jobject JNICALL
+Java_com_example_obyan_MainActivity_getFrame2Data(JNIEnv *env, jclass clazz) {
     jclass cls = env->FindClass(
             "com/example/obyan/SecondFrameData"); // Replace with the correct package and class name if changed :"(
     jmethodID constructor = env->GetMethodID(cls, "<init>", "(DDDDZZZZZZZZZZZZZZZZ)V");
@@ -382,13 +383,16 @@ Java_com_example_second_1test_MainActivity_getFrame2Data(JNIEnv *env, jclass cla
 
 
 extern "C" JNIEXPORT void JNICALL
-Java_com_example_second_1test_MainActivity_startReceivingData(JNIEnv *env, jclass clazz) {
+Java_com_example_obyan_MainActivity_startReceivingData(JNIEnv *env, jclass clazz) {
     continueReceiving = true;
     receiveData();
 }
 
-extern "C" JNIEXPORT void JNICALL
-Java_com_example_second_1test_MainActivity_stopReceivingData(JNIEnv *env, jclass clazz) {
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_com_example_obyan_MainActivity_stopReceivingData(JNIEnv *env, jclass clazz) {
     continueReceiving = false;
     receiveData();
+
 }

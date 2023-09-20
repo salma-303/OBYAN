@@ -3,13 +3,13 @@ package com.example.obyan;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.android.volley.Request;
@@ -18,6 +18,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.obyan.databinding.ActivityMainBinding;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -29,6 +30,14 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends FragmentActivity {
+    static {
+        System.loadLibrary("obyan");
+    }
+
+    private ActivityMainBinding binding;
+
+    private final Handler handler1 = new Handler(Looper.getMainLooper());
+
     private final View[] batterySquares = new View[10];
     private final Handler handler = new Handler();
     private TextView timeTextView;
@@ -52,11 +61,103 @@ public class MainActivity extends FragmentActivity {
     private boolean isButton4Enabled;
     private TextView curpercentage;
 
+    public static native FirstFrameData getFrame1Data();
+
+    private void updateTimeAndDate() {
+        // Get current time and date
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
+
+        // Format time
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
+        String currentTime = timeFormat.format(date);
+
+        // Format date
+        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
+        String currentDate = dateFormat.format(date);
+
+        // Display time and date
+        timeTextView.setText(currentTime);
+        dateTextView.setText(currentDate);
+    }
+
+    private void setupButtonImages() {
+        isButton1Enabled = true;
+        isButton2Enabled = true;
+        isButton3Enabled = true;
+        isButton4Enabled = true;
+
+        updateButtonImages();
+    }
+
+    private void updateButtonImages() {
+        if (isButton1Enabled) {
+            buttonImage2.setImageResource(R.drawable.fog);
+        } else {
+            buttonImage2.setImageResource(R.drawable.yellowfog);
+        }
+
+        if (isButton2Enabled) {
+            buttonImage3.setImageResource(R.drawable.strong);
+        } else {
+            buttonImage3.setImageResource(R.drawable.yellowstrong);
+        }
+
+        if (isButton3Enabled) {
+            buttonImage1.setImageResource(R.drawable.arrow2);
+        } else {
+            buttonImage1.setImageResource(R.drawable.greenarrow2);
+        }
+
+        if (isButton4Enabled) {
+            buttonImage4.setImageResource(R.drawable.arrow1);
+        } else {
+            buttonImage4.setImageResource(R.drawable.greenarrow1);
+        }
+    }
+
+    private void updateBatterySquares(int batteryPercentage) {
+        // Calculate the number of squares to make transparent based on battery percentage
+        int transparentSquares = 10 - (batteryPercentage / 10);
+
+        // Loop through each square and update their transparency with a delay
+        for (int i = 9; i >= transparentSquares; i--) {
+            final int squareIndex = i;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    batterySquares[squareIndex].setBackgroundColor(getResources().getColor(R.color.transparent));
+                }
+            }, (10 - i) * 200L); // Adjust the duration (200 milliseconds here) to control the speed of disappearance
+        }
+    }
+
+    public static native SecondFrameData getFrame2Data();
+
+    public static native void startReceivingData();
+
+    public static native void stopReceivingData();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        // Example of a call to a native method
+//        TextView tv = binding.sampleText;
+        // tv.setText(stringFromJNI());
+
+        // Update the UI with received data
+        updateUI();
+
+        // Start data reception in the background
+        startReceivingDataInBackground();
+
+//==================================================================================================
         timeTextView = findViewById(R.id.timeTextView);
         dateTextView = findViewById(R.id.dateTextView);
         updateTimeAndDate();
@@ -146,75 +247,52 @@ public class MainActivity extends FragmentActivity {
         });
     }
 
-    private void updateTimeAndDate() {
-        // Get current time and date
-        Calendar calendar = Calendar.getInstance();
-        Date date = calendar.getTime();
+    private void updateUI() {
+        Log.d("MainActivity", "updateUI() is called"); // Add this log statement
 
-        // Format time
-        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a", Locale.getDefault());
-        String currentTime = timeFormat.format(date);
+        // Get the latest frame data from the native side
+        FirstFrameData data = getFrame1Data(); // Call the native method to get the latest data
 
-        // Format date
-        SimpleDateFormat dateFormat = new SimpleDateFormat("EEE, MMM d", Locale.getDefault());
-        String currentDate = dateFormat.format(date);
+        // Get the motor speed and other parameters from the updated data
+        int speed = data.getMotorSpeedDec();
+        int dcBusCurrent = data.getDcBusCurrentAmps();
+        int motorPhaseCurrent = data.getMotorPhaseCurrentAmps();
 
-        // Display time and date
-        timeTextView.setText(currentTime);
-        dateTextView.setText(currentDate);
+
+        // Update the UI with the new parameters and frame identifier
+//        String text = "Frame 0x100 Data Received:\n\n\n" +
+//                "Motor Speed: " + speed + "\n" +
+//                "DC Bus Current: " + dcBusCurrent + "\n" +
+//                "Motor Phase Current: " + motorPhaseCurrent + "\n";
+
+
+//        // Update the UI with the motor speed
+//        handler1.post(() -> {
+//            TextView tv = binding.sampleText;
+//            tv.setText(text);
+//        });
+
+        // Schedule next UI update after a delay (100 milliseconds)
+        handler1.postDelayed(this::updateUI, 100);
     }
 
-    private void setupButtonImages() {
-        isButton1Enabled = true;
-        isButton2Enabled = true;
-        isButton3Enabled = true;
-        isButton4Enabled = true;
+    // Helper method to start data reception in a separate thread
+    private void startReceivingDataInBackground() {
+        new Thread(() -> {
+            startReceivingData();
 
-        updateButtonImages();
+            // The data reception will continue in the background thread until stopReceivingData is called
+            // You may also want to handle the stop condition or error scenarios here
+        }).start();
     }
 
-    private void updateButtonImages() {
-        if (isButton1Enabled) {
-            buttonImage2.setImageResource(R.drawable.fog);
-        } else {
-            buttonImage2.setImageResource(R.drawable.yellowfog);
-        }
+    @Override
+    protected void onDestroy() {
+        // Stop receiving data when the activity is destroyed
+        stopReceivingData();
 
-        if (isButton2Enabled) {
-            buttonImage3.setImageResource(R.drawable.strong);
-        } else {
-            buttonImage3.setImageResource(R.drawable.yellowstrong);
-        }
-
-        if (isButton3Enabled) {
-            buttonImage1.setImageResource(R.drawable.arrow2);
-        } else {
-            buttonImage1.setImageResource(R.drawable.greenarrow2);
-        }
-
-        if (isButton4Enabled) {
-            buttonImage4.setImageResource(R.drawable.arrow1);
-        } else {
-            buttonImage4.setImageResource(R.drawable.greenarrow1);
-        }
+        super.onDestroy();
     }
-
-    private void updateBatterySquares(int batteryPercentage) {
-        // Calculate the number of squares to make transparent based on battery percentage
-        int transparentSquares = 10 - (batteryPercentage / 10);
-
-        // Loop through each square and update their transparency with a delay
-        for (int i = 9; i >= transparentSquares; i--) {
-            final int squareIndex = i;
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-
-                    batterySquares[squareIndex].setBackgroundColor(getResources().getColor(R.color.transparent));
-                }
-            }, (10 - i) * 200); // Adjust the duration (200 milliseconds here) to control the speed of disappearance
-        }
-    }
-
 
 }
+
