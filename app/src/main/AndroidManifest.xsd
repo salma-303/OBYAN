@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified"
+    elementFormDefault="qualified">
+    <xs:element name="manifest" type="manifestType" />
+    <xs:complexType name="uses-sdkType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android"
+                    ref="and:minSdkVersion" />
+                <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android"
+                    ref="and:targetSdkVersion" />
+                <xs:attribute xmlns:tool="http://schemas.android.com/tools" ref="tool:ignore" />
+                <xs:attribute xmlns:tool="http://schemas.android.com/tools"
+                    ref="tool:overrideLibrary" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="uses-permissionType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android"
+                    ref="and:name" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="categoryType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android"
+                    ref="and:name" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="intent-filterType">
+        <xs:sequence>
+            <xs:element name="action" minOccurs="0" type="actionType" />
+            <xs:element name="category" type="categoryType" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="activityType">
+        <xs:sequence>
+            <xs:element name="intent-filter" minOccurs="0" type="intent-filterType" />
+        </xs:sequence>
+        <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android" ref="and:name" />
+        <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android" ref="and:exported" />
+    </xs:complexType>
+    <xs:complexType name="actionType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android"
+                    ref="and:name" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="serviceType">
+        <xs:sequence>
+            <xs:element name="intent-filter" type="intent-filterType" />
+        </xs:sequence>
+        <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android" ref="and:name" />
+        <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android" ref="and:exported" />
+    </xs:complexType>
+    <xs:complexType name="meta-dataType" mixed="true">
+        <xs:sequence>
+            <xs:element name="intent-filter" minOccurs="0" type="intent-filterType" />
+        </xs:sequence>
+        <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android" ref="and:name" />
+        <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android" ref="and:value" />
+        <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android" ref="and:exported" />
+    </xs:complexType>
+    <xs:complexType name="applicationType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+            <xs:element name="activity" maxOccurs="unbounded" minOccurs="0" type="activityType" />
+            <xs:element name="service" type="serviceType" />
+            <xs:element name="meta-data" maxOccurs="unbounded" minOccurs="0" type="meta-dataType" />
+        </xs:choice>
+        <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android"
+            ref="and:allowBackup" />
+        <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android"
+            ref="and:dataExtractionRules" />
+        <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android"
+            ref="and:fullBackupContent" />
+        <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android" ref="and:icon" />
+        <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android" ref="and:label" />
+        <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android" ref="and:roundIcon" />
+        <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android"
+            ref="and:supportsRtl" />
+        <xs:attribute xmlns:and="http://schemas.android.com/apk/res/android" ref="and:theme" />
+        <xs:attribute xmlns:tool="http://schemas.android.com/tools" ref="tool:targetApi" />
+    </xs:complexType>
+    <xs:complexType name="manifestType">
+        <xs:sequence>
+            <xs:element name="uses-sdk" type="uses-sdkType" />
+            <xs:element name="uses-permission" maxOccurs="unbounded" minOccurs="0"
+                type="uses-permissionType" />
+            <xs:element name="application" type="applicationType" />
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

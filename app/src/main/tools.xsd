@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://schemas.android.com/tools">
+    <xs:import schemaLocation="AndroidManifest.xsd" />
+    <xs:import namespace="http://schemas.android.com/apk/res/android"
+        schemaLocation="android.xsd" />
+    <xs:attribute name="ignore" type="xs:NCName" />
+    <xs:attribute name="overrideLibrary" type="xs:NCName" />
+    <xs:attribute name="targetApi" type="xs:integer" />
+</xs:schema>

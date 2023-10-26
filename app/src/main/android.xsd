@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://schemas.android.com/apk/res/android">
+    <xs:import schemaLocation="AndroidManifest.xsd" />
+    <xs:import namespace="http://schemas.android.com/tools" schemaLocation="tools.xsd" />
+    <xs:attribute name="minSdkVersion" type="xs:integer" />
+    <xs:attribute name="targetSdkVersion" type="xs:integer" />
+    <xs:attributeGroup name="name">
+        <xs:attribute name="name" form="qualified" type="xs:NCName" use="required" />
+    </xs:attributeGroup>
+    <xs:attribute name="allowBackup" type="xs:boolean" />
+    <xs:attribute name="dataExtractionRules" />
+    <xs:attribute name="fullBackupContent" />
+    <xs:attribute name="icon" />
+    <xs:attribute name="label" />
+    <xs:attribute name="roundIcon" />
+    <xs:attribute name="supportsRtl" type="xs:boolean" />
+    <xs:attribute name="theme" />
+    <xs:attribute name="exported" type="xs:boolean" />
+    <xs:attribute name="value" />
+    <xs:attributeGroup name="name1">
+        <xs:attribute name="name" form="qualified" use="required" />
+    </xs:attributeGroup>
+</xs:schema>
