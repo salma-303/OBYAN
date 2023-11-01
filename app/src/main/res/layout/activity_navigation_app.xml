@@ -269,37 +269,46 @@
                 <ImageView
                     android:layout_width="212dp"
                     android:layout_height="180dp"
-                    android:layout_alignBottom="@+id/speedometerTextView"
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="100dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="175dp"
                     android:layout_marginBottom="155dp"
                     android:alpha="1"
                     android:src="@drawable/logo_tranparent" />
+                <ImageView
+                    android:layout_width="212dp"
+                    android:layout_height="180dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginTop="175dp"
+                    android:layout_marginBottom="155dp"
+                    android:alpha="1"
+                    android:src="@drawable/speedometer" />
+
                 <TextView
                     android:id="@+id/nav_timeTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#FFFFFF"
-                    android:textSize="28sp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="10dp"
-                    android:text="00:00"/>
+                    android:text="00:00"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp" />
+
 
                 <TextView
                     android:id="@+id/nav_dateTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
                     android:layout_below="@id/nav_timeTextView"
                     android:layout_alignStart="@id/nav_timeTextView"
+                    android:layout_marginStart="0dp"
                     android:layout_marginTop="4dp"
-                    android:layout_marginStart="5dp"
-                    android:text="00/00/0000"/>
-
+                    android:text="00/00/0000"
+                    android:textColor="#FFFFFF"
+                    android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/idTVTemperature"
@@ -307,37 +316,25 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
                     android:gravity="center"
                     android:padding="5dp"
                     android:text="00°C"
                     android:textColor="@color/white"
-                    android:textSize="28dp" />
+                    android:textSize="20dp" />
 
                 <ImageView
                     android:id="@+id/idIVIcon"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="0dp"
-                    android:layout_marginTop="0dp"
                     android:layout_marginEnd="0dp"
                     android:layout_marginBottom="0dp"
                     android:layout_toStartOf="@+id/idTVTemperature" />
 
 
-                <TextView
-                    android:id="@+id/speedometerTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/squares_layout"
-                    android:layout_marginLeft="150dp"
-                    android:layout_marginTop="290dp"
-                    android:layout_marginBottom="30dp"
-                    android:text="00 km/h"
-                    android:layout_centerHorizontal="true"
-                    android:textColor="@android:color/white"
-                    android:textSize="35dp" />
+
 
                 <LinearLayout
                     android:id="@+id/topButtonsLayout"
@@ -351,17 +348,16 @@
 
                     <ImageView
                         android:id="@+id/buttonImage1"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="50dp"
                         android:layout_weight="1"
                         android:src="@drawable/arrow2" />
 
                     <ImageView
                         android:id="@+id/buttonImage2"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
@@ -369,8 +365,8 @@
 
                     <ImageView
                         android:id="@+id/buttonImage3"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
@@ -378,13 +374,24 @@
 
                     <ImageView
                         android:id="@+id/buttonImage4"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginEnd="5dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="50dp"
                         android:layout_weight="1"
                         android:src="@drawable/arrow1" />
                 </LinearLayout>
+
+                <Button
+                    android:id="@+id/backButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="250dp"
+                    android:layout_marginBottom="70dp"
+                    android:onClick="goBackToMainPage"
+                    android:text="Back"
+                    android:textColor="#FFFFFF" />
 
             </RelativeLayout>
         </FrameLayout>
@@ -392,7 +399,7 @@
 
 
     <androidx.cardview.widget.CardView
-        android:layout_width="460dp"
+        android:layout_width="510dp"
         android:layout_height="match_parent"
         android:layout_marginStart="450dp"
         app:cardCornerRadius="35dp">
@@ -400,7 +407,7 @@
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/maps"
             android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="460dp"
+            android:layout_width="510dp"
             android:layout_height="match_parent">
         </androidx.fragment.app.FragmentContainerView>
 
@@ -409,7 +416,7 @@
             android:queryHint="Search..."
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
+            android:layout_marginLeft="100dp"
             android:layout_marginTop="10dp"
             android:textColor="@color/black"
             android:background="@drawable/search"

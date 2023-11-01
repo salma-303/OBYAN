@@ -82,28 +82,56 @@ public class MainActivity extends FragmentActivity {
     }
 
     private void setupButtonImages() {
-        isButton1Enabled = true;
-        isButton2Enabled = true;
-        isButton3Enabled = true;
-        isButton4Enabled = true;
+        buttonImage1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isButton1Enabled = !isButton1Enabled;
+                updateButtonImages();
+            }
+        });
+
+        buttonImage2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isButton2Enabled = !isButton2Enabled;
+                updateButtonImages();
+            }
+        });
+
+        buttonImage3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isButton3Enabled = !isButton3Enabled;
+                updateButtonImages();
+            }
+        });
+
+        buttonImage4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isButton4Enabled = !isButton4Enabled;
+                updateButtonImages();
+            }
+        });
 
         updateButtonImages();
     }
 
+
     private void updateButtonImages() {
-        if (isButton1Enabled) {
+        if (isButton2Enabled) {
             buttonImage2.setImageResource(R.drawable.fog);
         } else {
             buttonImage2.setImageResource(R.drawable.yellowfog);
         }
 
-        if (isButton2Enabled) {
+        if (isButton3Enabled) {
             buttonImage3.setImageResource(R.drawable.strong);
         } else {
             buttonImage3.setImageResource(R.drawable.yellowstrong);
         }
 
-        if (isButton3Enabled) {
+        if (isButton1Enabled) {
             buttonImage1.setImageResource(R.drawable.arrow2);
         } else {
             buttonImage1.setImageResource(R.drawable.greenarrow2);
@@ -164,12 +192,12 @@ public class MainActivity extends FragmentActivity {
         handler.postDelayed(updateTimeRunnable, 1000);
 
 //==================================================================================================
-        TextView speedometerTextView = findViewById(R.id.speedometerTextView);
+        //TextView speedometerTextView = findViewById(R.id.speedometerTextView);
 
         // Set the initial value with unit
-        int speed = 0; // Replace 0 with your desired initial speed value
-        String unit = "km/h"; // Replace "km/h" with your desired unit
-        speedometerTextView.setText(speed+" "+ unit );
+        //int speed = 0; // Replace 0 with your desired initial speed value
+        //String unit = "km/h"; // Replace "km/h" with your desired unit
+        //speedometerTextView.setText(speed+" "+ unit );
 //==================================================================================================
         temperatureTV = findViewById(R.id.idTVTemperature);
         iconIV = findViewById(R.id.idIVIcon);

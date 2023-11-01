@@ -45,7 +45,7 @@ android {
     externalNativeBuild {
         cmake {
             path file('src/main/cpp/CMakeLists.txt')
-            version '3.27.5'
+            version '3.28.0'
         }
     }
     buildFeatures {
@@ -75,4 +75,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation 'androidx.mediarouter:mediarouter:1.4.0'
     implementation 'com.google.android.gms:play-services-cast-framework:21.3.0'
+    implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    implementation 'com.github.jd-alexander:library:1.1.0'
+    implementation 'com.google.android.material:material:1.1.0'
 }

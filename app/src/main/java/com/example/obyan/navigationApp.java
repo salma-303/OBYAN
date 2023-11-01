@@ -169,12 +169,6 @@ public class navigationApp extends FragmentActivity implements OnMapReadyCallbac
 //=================================================================================================
 
 //==================================================================================================
-        TextView speedometerTextView = findViewById(R.id.speedometerTextView);
-
-        // Set the initial value with unit
-        int speed = 0; // Replace 0 with your desired initial speed value
-        String unit = "km/h"; // Replace "km/h" with your desired unit
-        speedometerTextView.setText(speed + " " + unit);
 
 //==================================================================================================
         buttonImage1 = findViewById(R.id.buttonImage1);
@@ -226,28 +220,43 @@ public class navigationApp extends FragmentActivity implements OnMapReadyCallbac
 
 
     private void setupButtonImages() {
-        isButton1Enabled = true;
-        isButton2Enabled = true;
-        isButton3Enabled = true;
-        isButton4Enabled = true;
+        buttonImage1.setOnClickListener(v -> {
+            isButton1Enabled = !isButton1Enabled;
+            updateButtonImages();
+        });
+
+        buttonImage2.setOnClickListener(v -> {
+            isButton2Enabled = !isButton2Enabled;
+            updateButtonImages();
+        });
+
+        buttonImage3.setOnClickListener(v -> {
+            isButton3Enabled = !isButton3Enabled;
+            updateButtonImages();
+        });
+
+        buttonImage4.setOnClickListener(v -> {
+            isButton4Enabled = !isButton4Enabled;
+            updateButtonImages();
+        });
 
         updateButtonImages();
     }
 
     private void updateButtonImages() {
-        if (isButton1Enabled) {
+        if (isButton2Enabled) {
             buttonImage2.setImageResource(R.drawable.fog);
         } else {
             buttonImage2.setImageResource(R.drawable.yellowfog);
         }
 
-        if (isButton2Enabled) {
+        if (isButton3Enabled) {
             buttonImage3.setImageResource(R.drawable.strong);
         } else {
             buttonImage3.setImageResource(R.drawable.yellowstrong);
         }
 
-        if (isButton3Enabled) {
+        if (isButton1Enabled) {
             buttonImage1.setImageResource(R.drawable.arrow2);
         } else {
             buttonImage1.setImageResource(R.drawable.greenarrow2);
