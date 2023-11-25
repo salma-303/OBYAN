@@ -6,14 +6,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MainActivity">
 
+
+
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_width="512dp"
+        android:layout_height="match_parent"
         app:cardCornerRadius="35dp"
         app:cardElevation="8dp">
         <FrameLayout
-            android:layout_width="445dp"
+            android:layout_width="512dp"
             android:layout_height="match_parent">
 
             <View
@@ -267,72 +268,74 @@
 
 
                 <ImageView
-                    android:layout_width="212dp"
-                    android:layout_height="180dp"
+                    android:layout_width="370dp"
+                    android:layout_height="370dp"
+                    android:layout_above="@+id/squares_layout"
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="100dp"
-                    android:layout_marginTop="175dp"
-                    android:layout_marginBottom="155dp"
+                    android:layout_marginTop="160dp"
+                    android:layout_marginBottom="200dp"
                     android:alpha="1"
                     android:src="@drawable/logo_tranparent" />
+
                 <ImageView
-                    android:layout_width="212dp"
-                    android:layout_height="180dp"
+                    android:layout_width="370dp"
+                    android:layout_height="370dp"
+                    android:layout_above="@+id/squares_layout"
                     android:layout_centerHorizontal="true"
                     android:layout_marginLeft="100dp"
-                    android:layout_marginTop="175dp"
-                    android:layout_marginBottom="155dp"
+                    android:layout_marginTop="160dp"
+                    android:layout_marginBottom="200dp"
                     android:alpha="1"
                     android:src="@drawable/speedometer" />
+
 
                 <TextView
                     android:id="@+id/nav_timeTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="#FFFFFF"
+                    android:textSize="23sp"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginStart="15dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="00:00"
-                    android:textColor="#FFFFFF"
-                    android:textSize="20sp" />
-
+                    android:text="00:00"/>
 
                 <TextView
                     android:id="@+id/nav_dateTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="#FFFFFF"
+                    android:textSize="15sp"
                     android:layout_below="@id/nav_timeTextView"
                     android:layout_alignStart="@id/nav_timeTextView"
-                    android:layout_marginStart="0dp"
                     android:layout_marginTop="4dp"
-                    android:text="00/00/0000"
-                    android:textColor="#FFFFFF"
-                    android:textSize="12sp" />
+                    android:layout_marginStart="5dp"
+                    android:text="00/00/0000"/>
+
 
                 <TextView
                     android:id="@+id/idTVTemperature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginEnd="16dp"
                     android:gravity="center"
                     android:padding="5dp"
                     android:text="00°C"
                     android:textColor="@color/white"
-                    android:textSize="20dp" />
+                    android:textSize="23dp" />
 
                 <ImageView
                     android:id="@+id/idIVIcon"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
                     android:layout_marginEnd="0dp"
                     android:layout_marginBottom="0dp"
                     android:layout_toStartOf="@+id/idTVTemperature" />
-
 
 
 
@@ -343,21 +346,22 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginLeft="120px"
                     android:layout_marginTop="16dp"
-                    android:layout_marginRight="120px"
+                    android:layout_marginRight="140px"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:id="@+id/buttonImage1"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="50dp"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
                         android:layout_weight="1"
                         android:src="@drawable/arrow2" />
 
                     <ImageView
                         android:id="@+id/buttonImage2"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
@@ -365,8 +369,8 @@
 
                     <ImageView
                         android:id="@+id/buttonImage3"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:layout_marginStart="5dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
@@ -374,24 +378,13 @@
 
                     <ImageView
                         android:id="@+id/buttonImage4"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_marginRight="50dp"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginStart="5dp"
+                        android:layout_marginEnd="5dp"
                         android:layout_weight="1"
                         android:src="@drawable/arrow1" />
                 </LinearLayout>
-
-                <Button
-                    android:id="@+id/backButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="250dp"
-                    android:layout_marginBottom="70dp"
-                    android:onClick="goBackToMainPage"
-                    android:text="Back"
-                    android:textColor="#FFFFFF" />
 
             </RelativeLayout>
         </FrameLayout>
@@ -399,15 +392,15 @@
 
 
     <androidx.cardview.widget.CardView
-        android:layout_width="510dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginStart="450dp"
+        android:layout_marginStart="512dp"
         app:cardCornerRadius="35dp">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/maps"
             android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="510dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent">
         </androidx.fragment.app.FragmentContainerView>
 
@@ -416,7 +409,7 @@
             android:queryHint="Search..."
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="150dp"
             android:layout_marginTop="10dp"
             android:textColor="@color/black"
             android:background="@drawable/search"

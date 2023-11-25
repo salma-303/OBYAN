@@ -204,7 +204,7 @@ public class MainActivity extends FragmentActivity {
 
         // Make the API request
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        String url = "https://api.weatherapi.com/v1/forecast.json?key=5f50a1c9b1b14352bef133551231607&q=Alexandria&days=1&aqi=yes&alerts=yes";
+        String url = "https://api.weatherapi.com/v1/forecast.json?key=5f50a1c9b1b14352bef133551231607&q=Cairo&days=1&aqi=yes&alerts=yes";
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override

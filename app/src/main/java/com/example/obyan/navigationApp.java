@@ -1,12 +1,25 @@
 package com.example.obyan;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.example.obyan.FetchURL;
+import com.example.obyan.TaskLoadedCallback;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
@@ -35,7 +48,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.maps.model.StyleSpan;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.squareup.picasso.Picasso;
@@ -52,6 +64,7 @@ import java.util.Locale;
 
 
 public class navigationApp extends FragmentActivity implements OnMapReadyCallback {
+
     private final Handler handler = new Handler();
     private final int FINE_PERMISSION_CODE = 1;
     private final boolean isMapReady = false;
@@ -81,7 +94,10 @@ public class navigationApp extends FragmentActivity implements OnMapReadyCallbac
     private Polyline routePolyline;
 
 
-    @SuppressLint("MissingInflatedId")
+
+
+
+        @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +110,7 @@ public class navigationApp extends FragmentActivity implements OnMapReadyCallbac
                 String location = mapSearchView.getQuery().toString();
                 List<Address> addressList = null;
 
+
                 if (location != null) {
                     Geocoder geocoder = new Geocoder(navigationApp.this);
 
@@ -102,56 +119,61 @@ public class navigationApp extends FragmentActivity implements OnMapReadyCallbac
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    Address address = addressList.get(0);
-
-                    if (currentLocation != null) {
-                        LatLng destination = new LatLng(address.getLatitude(), address.getLongitude());
-                        float zoomLevel = 16.0f; //This goes up to 21
-                        myMap.addMarker(new MarkerOptions().position(destination).title(location));
-                        myMap.animateCamera(CameraUpdateFactory.newLatLngZoom(destination, zoomLevel));
-                    }
 
                     if (addressList != null && !addressList.isEmpty()) {
+                        Address address = addressList.get(0);
 
-                        LatLng destination = new LatLng(address.getLatitude(), address.getLongitude());
-                        float zoomLevel = 16.0f;
+                        if (currentLocation != null) {
+                            LatLng destination = new LatLng(address.getLatitude(), address.getLongitude());
 
-                        // Clear any existing polyline
-                        if (routePolyline != null) {
-                            routePolyline.remove();
+                            // Clear any existing polyline
+                            if (routePolyline != null) {
+                                routePolyline.remove();
+                            }
+
+                            // Create a new polyline from current location to destination
+                            PolylineOptions polylineOptions = new PolylineOptions()
+                                    .add(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), destination)
+                                    .color(Color.BLUE)  // Line color
+                                    .width(5);  // Line width
+
+
+                            routePolyline = myMap.addPolyline(polylineOptions);
+
+                            // Add markers for current and destination locations
+                            myMap.clear(); // Clear existing markers
+                            myMap.addMarker(new MarkerOptions().position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).title("My Location"));
+                            myMap.addMarker(new MarkerOptions().position(destination).title(location));
+                            LatLng current = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+
+
+
+                            // Move camera to show both markers
+                            LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                            builder.include(current);
+                            builder.include(destination);
+                            LatLngBounds bounds = builder.build();
+                            myMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+
+
+
+
+
                         }
-
-                        // Create a new polyline with multicolored segments
-                        PolylineOptions polylineOptions = new PolylineOptions()
-                                .add(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), destination)
-                                .addSpan(new StyleSpan(Color.RED))  // First segment color
-                                .addSpan(new StyleSpan(Color.GREEN));  // Second segment color
-
-                        routePolyline = myMap.addPolyline(polylineOptions);
-
-                        // Add markers for current and destination locations
-                        myMap.clear(); // Clear existing markers
-                        myMap.addMarker(new MarkerOptions().position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude())).title("My Location"));
-                        myMap.addMarker(new MarkerOptions().position(destination).title(location));
-
-                        // Move camera to show both markers
-                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                        builder.include(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
-                        builder.include(destination);
-                        LatLngBounds bounds = builder.build();
-                        myMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
-
                     }
                 }
-
-                return false;
+                return true;
             }
+
+
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
         });
+
+
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
@@ -166,9 +188,7 @@ public class navigationApp extends FragmentActivity implements OnMapReadyCallbac
         updateTimeAndDate();
         handler.postDelayed(updateTimeRunnable, 1000);
 
-//=================================================================================================
 
-//==================================================================================================
 
 //==================================================================================================
         buttonImage1 = findViewById(R.id.buttonImage1);
@@ -199,6 +219,29 @@ public class navigationApp extends FragmentActivity implements OnMapReadyCallbac
             }
         });
     }
+
+
+
+
+
+
+//    private String getUrl(LatLng origin, LatLng dest, String directionMode){
+//        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+//        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+//
+//        String mode  = "mode=" + directionMode;
+//
+//        String parameteres = str_origin + "&" + str_dest + "&" + mode;
+//
+//        String output = "json";
+//
+//        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" +parameteres + "&keys=" + "AIzaSyDSC5Rmhk7mpe9_J5sQubEk75kBPMStHD8";
+//
+//        return url;
+//
+//
+//    }
+
 
     private void updateTimeAndDate() {
         // Get current time and date
@@ -295,8 +338,9 @@ public class navigationApp extends FragmentActivity implements OnMapReadyCallbac
 
                     // Make the API request
                     RequestQueue requestQueue = Volley.newRequestQueue(this);
+                    String url = "https://api.weatherapi.com/v1/forecast.json?key=5f50a1c9b1b14352bef133551231607&q=Cairo&days=1&aqi=yes&alerts=yes";
 
-                    String url = "https://api.weatherapi.com/v1/forecast.json?key=5f50a1c9b1b14352bef133551231607&q=" + myCityName + "&days=1&aqi=yes&alerts=yes";
+//                    String url = "https://api.weatherapi.com/v1/forecast.json?key=5f50a1c9b1b14352bef133551231607&q=" + myCityName + "&days=1&aqi=yes&alerts=yes";
 
 
                     JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
